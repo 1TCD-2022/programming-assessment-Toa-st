@@ -84,10 +84,11 @@ def main():
     user_choice = 0
     
     print('This is a library manager!\n')
-    print('These are your options:')
+    
     time.sleep(1)
     
     while user_choice != exit_number:
+        print('These are your options:')
         for index in range(len(OPTIONS)):
             # this line prints out the text (index 0) and the index in the list (+ 1) to make it easier for users
             print('[{}] {}'.format(index + 1, OPTIONS[index][0]))
