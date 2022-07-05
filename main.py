@@ -68,7 +68,7 @@ class library_manager():
             # resets the list to get rid of old data that has been writen to worksheet
             new_book = []
             
-            print()
+            print('Added to spreadsheet!\n')
 
 def main():
     """This is the main function for this program where everything is being run"""
