@@ -40,11 +40,11 @@ class library_manager():
     def add_book(self):
         """This function allows the user to add books to the database"""
         # this dict allows that program to turn the 'f' and 'nf' to 
-        # 'fiction' anc 'non fiction' to be writen to in the worksheet
-        KEY_TO_NAME = {'f': 'ficton', 'nf': 'non ficton'}
+        # 'fiction' and 'non fiction' to be writen to in the worksheet
+        KEY_TO_NAME = {'f': 'fiction', 'nf': 'non fiction'}
         # this gets the keys (first part of dict items) and makes a list from them
         # in this case the list would be ['f', 'nf']
-        FICTION_OPTIONS = list(KEY_TO_NAME.keys())
+        FICTION_OPTIONS = ['f', 'nf', 'fiction', 'non fiction']
 
         new_book = []
 
@@ -56,14 +56,18 @@ class library_manager():
         for _ in range(amount_of_books):
             #populates list
             new_book.append(input('What is the name of the book: ').lower())
-            new_book.append(input('Who is the author of the book: ').lower())
-            new_book.append(input('Please enter the genre of the book: ').lower())
 
-            is_ficton = list_valid_input('Is the book ficton or non / ficton (F / NF): ', 
+            is_fiction = list_valid_input('Is the book fiction or non / fiction (F / NF): ', 
                                         'Please enter F or NF (fiction or non fiction)!\n', 
                                         FICTION_OPTIONS)
-
-            new_book.append(KEY_TO_NAME[is_ficton])
+            
+            # check if it is first half of list (f, nf) and converts to (fiction, non fiction)
+            if (is_fiction in FICTION_OPTIONS[:2]):
+                new_book.append(KEY_TO_NAME[is_fiction])
+                
+            else:
+                # if it is in the second half of the list is just appends it
+                new_book.append(is_fiction)
 
             # gets the next row that the program can write on
             # this is to avoid the program from overwriting already existing data
@@ -82,7 +86,7 @@ def main():
     manager = library_manager()
 
     # this list contains all the functions to be referenced later
-    # to add more functions, add another list with the print statment and the function
+    # to add more functions, add another nested list with the print statment and the function
     OPTIONS = [['Add Book', manager.add_book]]
     # exit number is used so the menu can be added to quickly
     exit_number = len(OPTIONS) + 1 
