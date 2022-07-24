@@ -1,0 +1,12 @@
+{
+    "type": "service_account",
+    "project_id": "librarymanager-354600",
+    "private_key_id": "9f88a33a3154833bd99a88691082d0eb85567dd6",
+    "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDGLodghK+YRL8i\nVHpoTg3dRQ0IgJRwNrGSM5VP6iTPOnxGSIOT9IKcx+wSdeXRZh2c48uENCmTO/ha\n0hCE10vltev6k7GCElWKb+mv+QXFORKxdjWWpfMeRkC18OTWtQzKjI3NMNE1kFfG\nCrToNfGJyIh9mUMtYsx4NsXyoclOtKGFKsl3ylGOngkPynkspKpV82sYqIP+5cJ5\ns7QvhkRc3i4CZU+frSEfSY4nthCjrxkjAu4gWLL1RMsGKdZSQpiLlqzm1ATtNEjK\nb8HxCM6B+TkMWVL+zGjkF4w7BajdpPJCPz8/+r7eePI34BJKJ6k9RbbXKytIUOhS\nIBx+ajr1AgMBAAECggEAGEY+uBMd3E10s+RxEdxC/8/4vAqJJALZq99m8eDrcqPm\nm50/hfHfGwu0iMD+zgVEqfY6SWPc68yJVmaAi3pA26QgLBMcck2DQ2+tygDQiiBm\n1Rcg5+ZFFHePxDlQw6kYJf8ip012x/7OzCfSPNcj/LfJWskDsh115LZLd2AFuP6u\nYWit+yIjDtbMf4L3urPQG5mKPviioOLSXUiNJdgxvMt2Za2ckTBpi0UOT5mcFhl0\ns5OFfhzoJEOrEIZLba5NIjCvmuMf6ICdpkQp1ZD64nl9RFqKrXkNcD1r76bV/RrD\nN3OAnLM2tURkvl/nowI3ZxqFIpsQzGR3Cspvj4yKSQKBgQDwSOowM44Xfh8eHZlt\nJAb/UhQieED89wqWJygtCDqIUxA+t/8uhvqwovdu7DobZQTPHuZelAi3Fr8zHtHy\nnDcStnjesTJf3WjnfcuvOOsJVIbJH9vrvOgfTxHxIr/aZXMP7THG0d7nOUKHPLID\nlVfCKEFkl9UEw651v5JOFaEKVwKBgQDTJK7VZdLJ99v0VVjkemAMyl+N643aHIoA\noNyJ556qIGM15011hLZvLXeN35OnA8Qznezx+bp956CjGhd+CxM8VwD2Fj+mbyyq\nBnyRSvAb8ESg70f2rnqM2i1AXMrjf4xhcW8Y9pDApbAMywZn6IXWq1UasyiLRL+X\nvReLCOAtkwKBgG6JzJpyDSsHjT8odL19tm5cjwCwe40kBM3Ao73brDmspKuFr7Hy\nzH7X6aYwrCaQGV9DIs1dooi/wSO+SO0oKjnEkeQ4dikdzTW5bCtmrtFy/jKmImDX\nXZ2RnXpl9wZ8ZytrfduuDrImaFGYfXgiiuW56SNiqc9wSeDHSYH8d0IvAoGAU5+f\nrtzZEyybbLWwsyzUhbxRBABa+ht7fKw5LFUTvgV9xYeKYhThvD6hrwrxi6AuQNM3\nWM6zUdI/CNn4m+7++1LqCozdQKmfYueWxmSLnEUYqTSbp9OKreZrLaaSpG+LxbwL\naDOfOO1mQGrYaqbo+xB4cE6srBvaVdqKTIKDZwkCgYAa/801xxG9Yd/UVTusqz5X\nCQentLNqLwyf6RMGe0vpW6VfRKZELj9mEGvmFXJwpz1ETvnbtqYe3XcvwDMef9on\n5qIaeTXPtk2NFD84ZWcRF+2no12a7oRENg+ViE1Mhc4rPHEfss56VKOHJGvZDwzD\n+UCsrjMTKc+ToBSqkwLlPA==\n-----END PRIVATE KEY-----\n",
+    "client_email": "librarymanagerserviceaccount@librarymanager-354600.iam.gserviceaccount.com",
+    "client_id": "104077213350636419113",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/librarymanagerserviceaccount%40librarymanager-354600.iam.gserviceaccount.com"
+}
