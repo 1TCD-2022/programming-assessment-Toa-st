@@ -13,7 +13,7 @@ IMPORTANT: you NEED to connected to the internet
 import gspread
 import time
 # other file
-from valid_input import list_valid_input, int_valid_input
+from valid_input import *
 
 
 def next_available_row(worksheet):
@@ -23,6 +23,23 @@ def next_available_row(worksheet):
 
     # gets the length of items in the coulumn and returns it
     return len(worksheet_coloumn) + 1
+
+def find_book(worksheet, book_name):
+    """This function finds the line that a certain book is stored"""
+    # gets the first coloumn of the worksheet
+    worksheet_items = list(worksheet.col_values(1))
+    
+    try:
+        # trys to find the book inside the coloumn
+        # it also adds 1 to the index as lists start from 0 and rows start from 1
+        book_row = worksheet_items.index(book_name) + 1
+    
+    except ValueError:
+        # sets book row to -1 indicating a error
+        book_row = -1
+
+    return book_row
+    
 
 
 class library_manager():
@@ -36,6 +53,9 @@ class library_manager():
         # these are for the 2 different worksheets (available, loaned)
         self.available_books = self.library_spreadsheet.worksheet('available')
         self.loaned_books = self.library_spreadsheet.worksheet('loaned')
+        
+        # to make the program look nice
+        self.spacer = '\n_______________________________________________\n'
 
     def add_book(self):
         """This function allows the user to add books to the database"""
@@ -46,41 +66,58 @@ class library_manager():
         # in this case the list would be ['f', 'nf']
         FICTION_OPTIONS = ['f', 'nf', 'fiction', 'non fiction']
 
-        new_book = []
+        
 
         amount_of_books = int_valid_input('How many books are you adding (1 - 100): ', 
                                           'Please enter a positive integer below (1 - 100)!\n',
                                           1, 100)
+        
+        new_book = []
+        for _ in range(amount_of_books):
+            new_book.append([])
         print() # blank line
 
-        for _ in range(amount_of_books):
+        for x in range(amount_of_books):
             #populates list
-            new_book.append(input('What is the name of the book: ').lower())
+            new_book[x].append(input('What is the name of the book: ').lower())
 
-            is_fiction = list_valid_input('Is the book fiction or non / fiction (F / NF): ', 
+            is_fiction = list_valid_input('Is the book fiction or non fiction (F / NF): ', 
                                         'Please enter F or NF (fiction or non fiction)!\n', 
                                         FICTION_OPTIONS)
             
             # check if it is first half of list [f, nf] and converts to [fiction, non fiction]
             if (is_fiction in FICTION_OPTIONS[:2]):
-                new_book.append(KEY_TO_NAME[is_fiction])
+                new_book[x].append(KEY_TO_NAME[is_fiction])
                 
             else:
                 # if it is in the second half of the list is just appends it
-                new_book.append(is_fiction)
+                new_book[x].append(is_fiction)
 
-            # gets the next row that the program can write on
-            # this is to avoid the program from overwriting already existing data
-            next_row = next_available_row(self.available_books)
-            # next row is passed to get the next line that the program should write on
-            self.available_books.update('A{}'.format(next_row), [new_book])
-            # resets the list to get rid of old data that has been writen to worksheet
-            new_book = []
-
-            print('Added to spreadsheet!\n')
+            print(self.spacer)
+        
+        next_row = next_available_row(self.available_books)
+        
+        self.available_books.update('A{}'.format(next_row), new_book)
     
     def loan_book(self):
         """This function allows the user to loan books to students"""
+        user_loan_book_name = ''
+        
+        while user_loan_book_name != '#':
+            user_loan_book_name = input('Enter the name of the book you would like to loan (# to exit): ').lower()
+            
+            user_loan_book_row = find_book(self.available_books, user_loan_book_name)
+            
+            if (user_loan_book_row != -1):
+                print('WIP')
+                pass
+            
+            elif (user_loan_book_row == -1 and user_loan_book_name != '#'):
+                print('Sorry, could not find your book')
+        
+        print(self.spacer)
+            
+                
         
 
 def main():
@@ -91,7 +128,7 @@ def main():
 
     # this list contains all the functions to be referenced later
     # to add more functions, add another nested list with the print statment and the function
-    OPTIONS = [['Add Book', manager.add_book]]
+    OPTIONS = [['Add Book', manager.add_book], ['Loan Book', manager.loan_book]]
     # exit number is used so the menu can be added to quickly
     exit_number = len(OPTIONS) + 1 
     user_choice = 0
@@ -110,7 +147,7 @@ def main():
         user_choice = int_valid_input("Pick an option ({} to exit): ".format(exit_number), 
                                     "Please enter a valid option!\n", 
                                     1, exit_number)
-        print() # blank line
+        print('\n_______________________________________________\n')
         if (user_choice != exit_number):
             OPTIONS[user_choice - 1][1]() # runs the specified function (index 1 of nested list)
             
