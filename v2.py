@@ -39,6 +39,13 @@ def find_book(worksheet, book_name):
         book_row = -1
 
     return book_row
+
+def clear_row(worksheet, row):
+    cells = worksheet.range('A{}:Z{}'.format(row, row))
+    for cell in cells:
+        cell.value = ''
+    
+    worksheet.update_cells(cells)
     
 
 
@@ -106,11 +113,12 @@ class library_manager():
         while user_loan_book_name != '#':
             user_loan_book_name = input('Enter the name of the book you would like to loan (# to exit): ').lower()
             
+            
+            # deletes book from available worksheet
             user_loan_book_row = find_book(self.available_books, user_loan_book_name)
             
             if (user_loan_book_row != -1):
-                print('WIP')
-                pass
+                clear_row(self.available_books, user_loan_book_row)
             
             elif (user_loan_book_row == -1 and user_loan_book_name != '#'):
                 print('Sorry, could not find your book')
