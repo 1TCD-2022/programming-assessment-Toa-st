@@ -29,25 +29,52 @@ def find_book(worksheet, book_name):
     # gets the first coloumn of the worksheet
     worksheet_items = list(worksheet.col_values(1))
     
-    try:
-        # trys to find the book inside the coloumn
-        # it also adds 1 to the index as lists start from 0 and rows start from 1
+    if (book_name in worksheet_items):
         book_row = worksheet_items.index(book_name) + 1
     
-    except ValueError:
-        # sets book row to -1 indicating a error
+    else:
         book_row = -1
 
     return book_row
 
-def clear_row(worksheet, row):
-    cells = worksheet.range('A{}:Z{}'.format(row, row))
+def move_book(worksheet1, worksheet2, row):
+    """This function moves a book from one worksheet to another"""
+    
+    # stores the row
+    cells = worksheet1.range('A{}:Z{}'.format(row, row))
+    new_cells = []
+    
+    # clears all the old cells
     for cell in cells:
+        new_cells.append(cell.value)
         cell.value = ''
     
-    worksheet.update_cells(cells)
+    # updates with old cells that have been cleared
+    worksheet1.update_cells(cells)
     
-
+    # adds cells from other worksheet
+    print(new_cells)
+    worksheet2.update('A{}'.format(next_available_row(worksheet2)), [new_cells])
+    
+def delete_gaps(worksheet):
+    """Takes a worksheet and gets rid of white spaces"""
+    good_rows = []
+    good_rows_content = []
+    # gets the first coloumn of the worksheet
+    worksheet_coloumn = list(worksheet.col_values(1))
+    
+    for row in range(len(worksheet_coloumn)):
+        if (worksheet_coloumn[row] != ''):
+            good_rows.append(row + 1)
+    
+    for good_row in good_rows:
+        good_rows_content.append(worksheet.get('A{}:Z{}'.format(good_row, good_row))[0])
+    
+    worksheet.clear()
+    
+    worksheet.update('A1', good_rows_content)
+        
+    
 
 class library_manager():
 
@@ -76,52 +103,56 @@ class library_manager():
         
 
         amount_of_books = int_valid_input('How many books are you adding (1 - 100): ', 
-                                          'Please enter a positive integer below (1 - 100)!\n',
+                                          'Please enter a positive integer between (1 - 100)!\n',
                                           1, 100)
         
-        new_book = []
-        for _ in range(amount_of_books):
-            new_book.append([])
-        print() # blank line
+        if (amount_of_books + next_available_row(self.available_books) <= 1000):
+        
+            new_book = []
+            for _ in range(amount_of_books):
+                new_book.append([])
+            print() # blank line
 
-        for x in range(amount_of_books):
-            #populates list
-            new_book[x].append(input('What is the name of the book: ').lower())
+            for x in range(amount_of_books):
+                #populates list
+                new_book[x].append(input('What is the name of the book: ').lower())
 
-            is_fiction = list_valid_input('Is the book fiction or non fiction (F / NF): ', 
-                                        'Please enter F or NF (fiction or non fiction)!\n', 
-                                        FICTION_OPTIONS)
-            
-            # check if it is first half of list [f, nf] and converts to [fiction, non fiction]
-            if (is_fiction in FICTION_OPTIONS[:2]):
-                new_book[x].append(KEY_TO_NAME[is_fiction])
+                is_fiction = list_valid_input('Is the book fiction or non fiction (F / NF): ', 
+                                            'Please enter F or NF (fiction or non fiction)!\n', 
+                                            FICTION_OPTIONS)
                 
-            else:
-                # if it is in the second half of the list is just appends it
-                new_book[x].append(is_fiction)
+                # check if it is first half of list [f, nf] and converts to [fiction, non fiction]
+                if (is_fiction in FICTION_OPTIONS[:2]):
+                    new_book[x].append(KEY_TO_NAME[is_fiction])
+                    
+                else:
+                    # if it is in the second half of the list is just appends it
+                    new_book[x].append(is_fiction)
 
-            print(self.spacer)
+                print(self.spacer)
+            
+            next_row = next_available_row(self.available_books)
+            
+            self.available_books.update('A{}'.format(next_row), new_book)
         
-        next_row = next_available_row(self.available_books)
-        
-        self.available_books.update('A{}'.format(next_row), new_book)
+        else:
+            print('Sorry, the library does not have enough space for that amount of books.')
     
     def loan_book(self):
         """This function allows the user to loan books to students"""
-        user_loan_book_name = ''
         
-        while user_loan_book_name != '#':
-            user_loan_book_name = input('Enter the name of the book you would like to loan (# to exit): ').lower()
+        is_loaning = True
+        loan_book = ''
+        while loan_book != '#':
+            loan_book = input('Please enter the name of the book (# to exit): ')
+            book_row = find_book(self.available_books, loan_book)
             
-            
-            # deletes book from available worksheet
-            user_loan_book_row = find_book(self.available_books, user_loan_book_name)
-            
-            if (user_loan_book_row != -1):
-                clear_row(self.available_books, user_loan_book_row)
-            
-            elif (user_loan_book_row == -1 and user_loan_book_name != '#'):
-                print('Sorry, could not find your book')
+            if (book_row != -1):
+                move_book(self.available_books, self.loaned_books, book_row)
+        
+        delete_gaps(self.available_books)
+                
+                
         
         print(self.spacer)
             
@@ -150,7 +181,7 @@ def main():
         for index in range(len(OPTIONS)):
             # this line prints out the text (index 0) and the index in the list (+ 1) to make it easier for users
             print('[{}] {}'.format(index + 1, OPTIONS[index][0]))
-            time.sleep(0.5)
+            time.sleep(0.2)
  
         user_choice = int_valid_input("Pick an option ({} to exit): ".format(exit_number), 
                                     "Please enter a valid option!\n", 
