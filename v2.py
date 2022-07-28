@@ -219,7 +219,7 @@ class library_manager():
         
 
 def main():
-    """This is the main function for this program where everything is being run"""
+    """This is the main function for this program where everything is being run"""    
 
     # make new object of 'library_manager' class
     manager = library_manager()
