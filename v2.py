@@ -37,24 +37,32 @@ def find_book(worksheet, book_name):
 
     return book_row
 
-def move_book(worksheet1, worksheet2, row):
+def move_book(worksheet1, worksheet2, rows):
     """This function moves a book from one worksheet to another"""
     
-    # stores the row
-    cells = worksheet1.range('A{}:Z{}'.format(row, row))
     new_cells = []
     
-    # clears all the old cells
-    for cell in cells:
-        new_cells.append(cell.value)
-        cell.value = ''
+    for _ in range(len(rows)):
+        new_cells.append([])
     
-    # updates with old cells that have been cleared
-    worksheet1.update_cells(cells)
-    
+    # stores the row
+    for index in range(len(rows)):
+        
+        # gets the current rows data
+        cells = worksheet1.range('A{}:Z{}'.format(rows[index], rows[index]))
+        
+        
+        # clears all the old cells
+        for cell in cells:
+            new_cells[index].append(cell.value)
+            cell.value = ''
+        
+        
+        # updates with old cells that have been cleared
+        worksheet1.update_cells(cells)
+        
     # adds cells from other worksheet
-    print(new_cells)
-    worksheet2.update('A{}'.format(next_available_row(worksheet2)), [new_cells])
+    worksheet2.update('A{}'.format(next_available_row(worksheet2)), new_cells)
     
 def delete_gaps(worksheet):
     """Takes a worksheet and gets rid of white spaces"""
@@ -141,15 +149,16 @@ class library_manager():
     def loan_book(self):
         """This function allows the user to loan books to students"""
         
-        is_loaning = True
+        book_rows = []
         loan_book = ''
         while loan_book != '#':
             loan_book = input('Please enter the name of the book (# to exit): ')
             book_row = find_book(self.available_books, loan_book)
             
             if (book_row != -1):
-                move_book(self.available_books, self.loaned_books, book_row)
+                book_rows.append(book_row)
         
+        move_book(self.available_books, self.loaned_books, book_rows)
         delete_gaps(self.available_books)
                 
                 
