@@ -4,7 +4,8 @@ Author: Varun Goel
 Date: 29 / 06 / 22
 Description: This program will allow the user to:
     interact with a google spreadsheet and add books to a database
-Version: 1.0
+    allow the user to loan books to students
+Version: 2.0
 
 IMPORTANT: you NEED to connected to the internet
            for the database to be connected
