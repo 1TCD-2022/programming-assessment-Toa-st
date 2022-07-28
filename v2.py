@@ -151,24 +151,69 @@ class library_manager():
     def loan_book(self):
         """This function allows the user to loan books to students"""
         
+        # this list is used for storing all the rows of te books that the user is loaning
         book_rows = []
+        
+        # name of book
         loan_book = ''
+        
+        # repeats until user enters '#'
         while loan_book != '#':
             loan_book = input('Please enter the name of the book (# to exit): ').lower()
+            
+            # finds the row of the said book name
             book_row = find_book(self.available_books, loan_book)
             
+            # if the function does not return -1 (not found) it adds the new row to a list
             if (book_row != -1):
                 book_rows.append(book_row)
             
+            # if the book row is not found and not '#' (exxit char) it will tell the user
             elif (book_row == -1 and loan_book != '#'):
                 print('Sorry, could not find your book.')
         
+        # moves the books
         move_book(self.available_books, self.loaned_books, book_rows, range2='B')
+        
+        print('Loaned out books.')
+        
+        # gets rid of gaps
         delete_gaps(self.available_books)
-                
-                
         
         print(self.spacer)
+    
+    def return_book(self):
+        """This function allows users to reutrn books"""
+        book_rows = []
+        
+        # name of book
+        return_book = ''
+        
+        # repeats until user enters '#'
+        while return_book != '#':
+            return_book = input('Please enter the name of the book (# to exit): ').lower()
+            
+            # finds the row of the said book name
+            book_row = find_book(self.loaned_books, return_book)
+            
+            # if the function does not return -1 (not found) it adds the new row to a list
+            if (book_row != -1):
+                book_rows.append(book_row)
+            
+            # if the book row is not found and not '#' (exxit char) it will tell the user
+            elif (book_row == -1 and return_book != '#'):
+                print('Sorry, could not find your book.')
+        
+        # moves the books
+        move_book(self.loaned_books, self.available_books, book_rows, range2='D')
+        
+        print('Returned books.')
+        
+        # gets rid of gaps
+        delete_gaps(self.loaned_books)
+        
+        print(self.spacer)
+        
             
                 
         
@@ -181,7 +226,9 @@ def main():
 
     # this list contains all the functions to be referenced later
     # to add more functions, add another nested list with the print statment and the function
-    OPTIONS = [['Add Book', manager.add_book], ['Loan Book', manager.loan_book]]
+    OPTIONS = [['Add Book', manager.add_book], 
+               ['Loan Book', manager.loan_book], 
+               ['Return Book', manager.return_book]]
     # exit number is used so the menu can be added to quickly
     exit_number = len(OPTIONS) + 1 
     user_choice = 0
