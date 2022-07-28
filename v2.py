@@ -38,7 +38,7 @@ def find_book(worksheet, book_name):
 
     return book_row
 
-def move_book(worksheet1, worksheet2, rows):
+def move_book(worksheet1, worksheet2, rows, range1='A', range2='Z'):
     """This function moves a book from one worksheet to another"""
     
     new_cells = []
@@ -50,7 +50,8 @@ def move_book(worksheet1, worksheet2, rows):
     for index in range(len(rows)):
         
         # gets the current rows data
-        cells = worksheet1.range('A{}:Z{}'.format(rows[index], rows[index]))
+        cells = worksheet1.range('{}{}:{}{}'.format(range1, rows[index], 
+                                                    range2, rows[index]))
         
         
         # clears all the old cells
@@ -153,13 +154,16 @@ class library_manager():
         book_rows = []
         loan_book = ''
         while loan_book != '#':
-            loan_book = input('Please enter the name of the book (# to exit): ')
+            loan_book = input('Please enter the name of the book (# to exit): ').lower()
             book_row = find_book(self.available_books, loan_book)
             
             if (book_row != -1):
                 book_rows.append(book_row)
+            
+            elif (book_row == -1 and loan_book != '#'):
+                print('Sorry, could not find your book.')
         
-        move_book(self.available_books, self.loaned_books, book_rows)
+        move_book(self.available_books, self.loaned_books, book_rows, range2='B')
         delete_gaps(self.available_books)
                 
                 
