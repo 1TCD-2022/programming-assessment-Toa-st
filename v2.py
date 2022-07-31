@@ -214,9 +214,8 @@ class library_manager():
         
         print(self.spacer)
         
-            
-                
         
+             
 
 def main():
     """This is the main function for this program where everything is being run"""    
