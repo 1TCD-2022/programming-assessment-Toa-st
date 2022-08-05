@@ -64,6 +64,7 @@ def move_book(worksheet1, worksheet2, rows, range1='A', range2='Z'):
         worksheet1.update_cells(cells)
         
     # adds cells from other worksheet
+    print(new_cells)
     worksheet2.update('A{}'.format(next_available_row(worksheet2)), new_cells)
     
 def delete_gaps(worksheet):
@@ -125,7 +126,17 @@ class library_manager():
 
             for x in range(amount_of_books):
                 #populates list
-                new_book[x].append(input('What is the name of the book: ').lower())
+                book_name = input('What is the name of the book: ').lower()
+                
+                # checks if book is in library
+                if (find_book(self.available_books, book_name) == -1):
+                    # if it is not, it adds the name
+                    new_book[x].append(book_name)
+                
+                else:
+                    # otherwise it restarts at the top of the loop
+                    print('This book has already been added to the library.\n')
+                    continue 
 
                 is_fiction = list_valid_input('Is the book fiction or non fiction (F / NF): ', 
                                             'Please enter F or NF (fiction or non fiction)!\n', 
@@ -141,8 +152,8 @@ class library_manager():
 
                 print(self.spacer)
             
-            next_row = next_available_row(self.available_books)
             
+            next_row = next_available_row(self.available_books)
             self.available_books.update('A{}'.format(next_row), new_book)
         
         else:
@@ -214,7 +225,6 @@ class library_manager():
         
         print(self.spacer)
         
-        
              
 
 def main():
@@ -255,6 +265,6 @@ def main():
 
     print('Thanks for using this program!')
 
-if (__name__ == '__main__'):
+if (__name__ == '__main__'):    
     main()  # runs the program
     
