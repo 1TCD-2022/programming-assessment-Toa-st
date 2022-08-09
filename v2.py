@@ -64,7 +64,6 @@ def move_book(worksheet1, worksheet2, rows, range1='A', range2='Z'):
         worksheet1.update_cells(cells)
         
     # adds cells from other worksheet
-    print(new_cells)
     worksheet2.update('A{}'.format(next_available_row(worksheet2)), new_cells)
     
 def delete_gaps(worksheet):
@@ -178,8 +177,9 @@ class library_manager():
             # if the function does not return -1 (not found) it adds the new row to a list
             if (book_row != -1):
                 book_rows.append(book_row)
+                print('Found book!')
             
-            # if the book row is not found and not '#' (exxit char) it will tell the user
+            # if the book row is not found and not '#' (exit char) it will tell the user
             elif (book_row == -1 and loan_book != '#'):
                 print('Sorry, could not find your book.')
         
@@ -210,10 +210,11 @@ class library_manager():
             # if the function does not return -1 (not found) it adds the new row to a list
             if (book_row != -1):
                 book_rows.append(book_row)
+                print('Found book!')
             
-            # if the book row is not found and not '#' (exxit char) it will tell the user
+            # if the book row is not found and not '#' (exit char) it will tell the user
             elif (book_row == -1 and return_book != '#'):
-                print('Sorry, could not find your book.')
+                print('Sorry, could not find the book.')
         
         # moves the books
         move_book(self.loaned_books, self.available_books, book_rows, range2='D')
