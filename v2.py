@@ -1,7 +1,7 @@
 """
 Filename: main.py
 Author: Varun Goel
-Date: 29 / 06 / 22
+Date: 20 / 07 / 22
 Description: This program will allow the user to:
     interact with a google spreadsheet and add books to a database
     allow the user to loan books to students
