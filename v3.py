@@ -4,10 +4,15 @@ Author: Varun Goel
 Date: 10 / 08 / 22
 Description: This program will allow the user to:
     interact with a google spreadsheet and add books to a database
-    allow the user to loan books to students
-    allow users to return books
+    allow the user to:
+        loan books
+        return books
+        view books (available and loaned)
+        see books that are close to due date
     
 Version: 3.0
+
+Link: https://docs.google.com/spreadsheets/d/1cWH1xguStiyFoVgJWaLb2kMNlAGlbEnt4MFP20gnXm0/edit?usp=sharing
 
 IMPORTANT: you NEED to connected to the internet
            for the database to be connected
@@ -86,7 +91,30 @@ def delete_gaps(worksheet):
     
     worksheet.update('A1', good_rows_content)
         
+def view_books(worksheet):
+    """This function prints the books from a list"""
+    book_names = list(worksheet.col_values(1))
+    book_fiction = list(worksheet.col_values(2))
     
+    # gets the highest length book name to print spacing evenly
+    # the + 1 is for spacing
+    longest_book = len(max(book_names)) + 1
+    
+    
+    # checks if the worksheet is empty
+    if (book_names != []):
+        for index in range(len(book_names)):
+            
+            # finds correct spacing and gets that many spaces
+            space = ' '
+            spaces = longest_book - len(book_names[index])
+            
+            print('{}{}| {}'.format(book_names[index], space * spaces, book_fiction[index]))
+    
+    else:
+        print('\nThere are no books here!')
+    
+    print('\n_______________________________________________\n')
 
 class library_manager():
 
@@ -130,8 +158,13 @@ class library_manager():
                 book_name = input('What is the name of the book: ').lower()
                 
                 # checks if book is in library
-                if (find_book(self.available_books, book_name) == -1):
-                    # if it is not, it adds the name
+                is_available = find_book(self.available_books, book_name)
+                is_loaned = find_book(self.loaned_books, book_name)
+                
+                # adds them together
+                # if they are both -1 (not found), -1 + -1 is 0
+                if (is_available + is_loaned == 0):
+                    # if it is not found, it adds the name
                     new_book[x].append(book_name)
                 
                 else:
@@ -229,7 +262,16 @@ class library_manager():
         delete_gaps(self.loaned_books)
         
         print(self.spacer)
+    
+    def view_available(self):
+        print('These are the book(s) that are available to loan:\n')
         
+        view_books(self.available_books)
+    
+    def view_loaned(self):
+        print('These are the book(s) that are currently loaned:\n')
+        
+        view_books(self.loaned_books)
              
 
 def main():
@@ -242,7 +284,9 @@ def main():
     # to add more functions, add another nested list with the print statment and the function
     OPTIONS = [['Add Book', manager.add_book], 
                ['Loan Book', manager.loan_book], 
-               ['Return Book', manager.return_book]]
+               ['Return Book', manager.return_book],
+               ['View Available Books', manager.view_available],
+               ['View Loaned Books', manager.view_loaned]]
     # exit number is used so the menu can be added to quickly
     exit_number = len(OPTIONS) + 1 
     user_choice = 0
