@@ -183,10 +183,11 @@ class library_manager():
             elif (book_row == -1 and loan_book != '#'):
                 print('Sorry, could not find your book.')
         
-        # moves the books
-        move_book(self.available_books, self.loaned_books, book_rows, range2='B')
+        # moves the books if there are books to move
+        if (book_rows != []):
+            move_book(self.available_books, self.loaned_books, book_rows, range2='B')
+            print('Loaned out books.')
         
-        print('Loaned out books.')
         
         # gets rid of gaps
         delete_gaps(self.available_books)
@@ -216,10 +217,11 @@ class library_manager():
             elif (book_row == -1 and return_book != '#'):
                 print('Sorry, could not find the book.')
         
-        # moves the books
-        move_book(self.loaned_books, self.available_books, book_rows, range2='D')
+        # moves the books 
         
-        print('Returned books.')
+        if (book_rows != []):
+            move_book(self.loaned_books, self.available_books, book_rows, range2='D')
+            print('Returned books.')
         
         # gets rid of gaps
         delete_gaps(self.loaned_books)
