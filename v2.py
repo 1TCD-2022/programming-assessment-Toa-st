@@ -1,5 +1,5 @@
 """
-Filename: main.py
+Filename: v2.py
 Author: Varun Goel
 Date: 20 / 07 / 22
 Description: This program will allow the user to:
@@ -270,4 +270,3 @@ def main():
 
 if (__name__ == '__main__'):    
     main()  # runs the program
-    
