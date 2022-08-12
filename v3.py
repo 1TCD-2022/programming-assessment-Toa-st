@@ -45,7 +45,7 @@ def find_book(worksheet, book_name):
 
     return book_row
 
-def move_book(worksheet1, worksheet2, rows, range1='A', range2='Z'):
+def move_book(worksheet1, worksheet2, rows, range1='A', range2='Z', other_info=[]):
     """This function moves a book from one worksheet to another"""
     
     new_cells = []
@@ -69,7 +69,7 @@ def move_book(worksheet1, worksheet2, rows, range1='A', range2='Z'):
         
         # updates with old cells that have been cleared
         worksheet1.update_cells(cells)
-        
+
     # adds cells from other worksheet
     worksheet2.update('A{}'.format(next_available_row(worksheet2)), new_cells)
     
@@ -96,18 +96,19 @@ def view_books(worksheet):
     book_names = list(worksheet.col_values(1))
     book_fiction = list(worksheet.col_values(2))
     
-    # gets the highest length book name to print spacing evenly
-    # the + 1 is for spacing
-    longest_book = len(max(book_names)) + 1
-    
     
     # checks if the worksheet is empty
     if (book_names != []):
+        
+        # gets the highest length book name to print spacing evenly
+        longest_book = max(book_names, key=len)
+    
         for index in range(len(book_names)):
             
             # finds correct spacing and gets that many spaces
             space = ' '
-            spaces = longest_book - len(book_names[index])
+            # adds 1 for spacing
+            spaces = len(longest_book)  + 1 - len(book_names[index])
             
             print('{}{}| {}'.format(book_names[index], space * spaces, book_fiction[index]))
     
@@ -163,7 +164,7 @@ class library_manager():
                 
                 # adds them together
                 # if they are both -1 (not found), -1 + -1 is 0
-                if (is_available + is_loaned == 0):
+                if (is_available == -1 and is_loaned == -1):
                     # if it is not found, it adds the name
                     new_book[x].append(book_name)
                 
@@ -255,7 +256,7 @@ class library_manager():
         # moves the books 
         
         if (book_rows != []):
-            move_book(self.loaned_books, self.available_books, book_rows, range2='D')
+            move_book(self.loaned_books, self.available_books, book_rows, range2='B')
             print('Returned books.')
         
         # gets rid of gaps
@@ -316,4 +317,3 @@ def main():
 
 if (__name__ == '__main__'):    
     main()  # runs the program
-    
