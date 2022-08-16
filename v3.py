@@ -184,6 +184,17 @@ class library_manager():
                 else:
                     # if it is in the second half of the list is just appends it
                     new_book[x].append(is_fiction)
+                
+                # gets rid of empty spaces (book found in library)
+                
+                empty_books = []
+                
+                for book in range(len(new_book)):
+                    if (new_book[book] == []):
+                        empty_books.append(book)
+                
+                for empty_book in empty_books:
+                    new_book.pop(empty_book)
 
                 print(self.spacer)
             
