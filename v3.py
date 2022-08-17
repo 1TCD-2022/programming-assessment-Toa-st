@@ -67,7 +67,7 @@ def move_book(worksheet1, worksheet2, rows, range1='A', range2='Z', other_info=[
             cell.value = ''
         
         if (other_info != []):
-            for info in other_info:
+            for info in other_info[index]:
                 new_cells[index].append(info)
         
         
@@ -216,7 +216,7 @@ class library_manager():
         book_rows = []
         
         # used to store the names of the students
-        student_rows = []
+        additional_info = []
         
         # name of book and student
         loan_book = ''
@@ -235,7 +235,12 @@ class library_manager():
                 # if the function does not return -1 (not found) it adds the new row to a list
                 if (book_row != -1):
                     book_rows.append(book_row)
-                    student_rows.append(student_name)
+                    
+                    # adds the students name and the time + 3 weeks in seconds
+                    three_weeks_seconds = 1814400
+                    time_stamp = round(time.time(), 0) + three_weeks_seconds
+                    
+                    additional_info.append([student_name, time_stamp])
                     print('Found book!')
                 
                 # if the book row is not found and not '#' (exit char) it will tell the user
@@ -244,7 +249,7 @@ class library_manager():
         
         # moves the books if there are books to move
         if (book_rows != []):
-            move_book(self.available_books, self.loaned_books, book_rows, range2='B', other_info=student_rows)
+            move_book(self.available_books, self.loaned_books, book_rows, range2='B', other_info=additional_info)
             print('Loaned out books.')
         
         
@@ -255,6 +260,7 @@ class library_manager():
     
     def return_book(self):
         """This function allows users to reutrn books"""
+        # this list is used for storing all the rows of te books that the user is returning
         book_rows = []
         
         # name of book
@@ -264,17 +270,19 @@ class library_manager():
         while return_book != '#':
             return_book = input('Please enter the name of the book (# to exit): ').lower()
             
-            # finds the row of the said book name
-            book_row = find_book(self.loaned_books, return_book, 1)
+            if (return_book != '#'):
             
-            # if the function does not return -1 (not found) it adds the new row to a list
-            if (book_row != -1):
-                book_rows.append(book_row)
-                print('Found book!')
-            
-            # if the book row is not found and not '#' (exit char) it will tell the user
-            elif (book_row == -1 and return_book != '#'):
-                print('Sorry, could not find the book.')
+                # finds the row of the said book name
+                book_row = find_book(self.loaned_books, return_book, 1)
+                
+                # if the function does not return -1 (not found) it adds the new row to a list
+                if (book_row != -1):
+                    book_rows.append(book_row)
+                    print('Found book!')
+                
+                # if the book row is not found and not '#' (exit char) it will tell the user
+                elif (book_row == -1):
+                    print('Sorry, could not find the book.')
         
         # moves the books 
         
