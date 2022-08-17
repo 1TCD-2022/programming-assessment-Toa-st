@@ -32,10 +32,10 @@ def next_available_row(worksheet):
     # gets the length of items in the coulumn and returns it
     return len(worksheet_coloumn) + 1
 
-def find_book(worksheet, book_name):
+def find_book(worksheet, book_name, col):
     """This function finds the line that a certain book is stored"""
     # gets the first coloumn of the worksheet
-    worksheet_items = list(worksheet.col_values(1))
+    worksheet_items = list(worksheet.col_values(col))
     
     if (book_name in worksheet_items):
         book_row = worksheet_items.index(book_name) + 1
@@ -65,6 +65,10 @@ def move_book(worksheet1, worksheet2, rows, range1='A', range2='Z', other_info=[
         for cell in cells:
             new_cells[index].append(cell.value)
             cell.value = ''
+        
+        if (other_info != []):
+            for info in other_info:
+                new_cells[index].append(info)
         
         
         # updates with old cells that have been cleared
@@ -159,8 +163,8 @@ class library_manager():
                 book_name = input('What is the name of the book: ').lower()
                 
                 # checks if book is in library
-                is_available = find_book(self.available_books, book_name)
-                is_loaned = find_book(self.loaned_books, book_name)
+                is_available = find_book(self.available_books, book_name, 1)
+                is_loaned = find_book(self.loaned_books, book_name, 1)
                 
                 # adds them together
                 # if they are both -1 (not found), -1 + -1 is 0
@@ -211,28 +215,36 @@ class library_manager():
         # this list is used for storing all the rows of te books that the user is loaning
         book_rows = []
         
-        # name of book
+        # used to store the names of the students
+        student_rows = []
+        
+        # name of book and student
         loan_book = ''
         
         # repeats until user enters '#'
         while loan_book != '#':
             loan_book = input('Please enter the name of the book (# to exit): ').lower()
             
-            # finds the row of the said book name
-            book_row = find_book(self.available_books, loan_book)
-            
-            # if the function does not return -1 (not found) it adds the new row to a list
-            if (book_row != -1):
-                book_rows.append(book_row)
-                print('Found book!')
-            
-            # if the book row is not found and not '#' (exit char) it will tell the user
-            elif (book_row == -1 and loan_book != '#'):
-                print('Sorry, could not find your book.')
+            # makes sure it does not loop if it is not asked to
+            if (loan_book != '#'):
+                student_name = str_valid_input('Please enter the name of the student: ', 
+                                            'Please enter a valid name! (not digits)')
+                # finds the row of the said book name
+                book_row = find_book(self.available_books, loan_book, 1)
+                
+                # if the function does not return -1 (not found) it adds the new row to a list
+                if (book_row != -1):
+                    book_rows.append(book_row)
+                    student_rows.append(student_name)
+                    print('Found book!')
+                
+                # if the book row is not found and not '#' (exit char) it will tell the user
+                elif (book_row == -1):
+                    print('Sorry, could not find your book.')
         
         # moves the books if there are books to move
         if (book_rows != []):
-            move_book(self.available_books, self.loaned_books, book_rows, range2='B')
+            move_book(self.available_books, self.loaned_books, book_rows, range2='B', other_info=student_rows)
             print('Loaned out books.')
         
         
@@ -253,7 +265,7 @@ class library_manager():
             return_book = input('Please enter the name of the book (# to exit): ').lower()
             
             # finds the row of the said book name
-            book_row = find_book(self.loaned_books, return_book)
+            book_row = find_book(self.loaned_books, return_book, 1)
             
             # if the function does not return -1 (not found) it adds the new row to a list
             if (book_row != -1):
