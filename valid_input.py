@@ -33,7 +33,7 @@ def str_valid_input(input_message, error_message):
     is_valid = False
     
     while not is_valid:
-        user_input = input(input_message)
+        user_input = input(input_message).lower()
         
         if (not user_input.isdigit()):
             is_valid = True
