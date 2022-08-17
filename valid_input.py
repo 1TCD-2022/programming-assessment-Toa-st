@@ -27,3 +27,18 @@ def int_valid_input(input_message, error_message, low, high):
             print(error_message)
     
     return user_input
+
+def str_valid_input(input_message, error_message):
+    """This function gets valid string input (checks if it is digit)"""
+    is_valid = False
+    
+    while not is_valid:
+        user_input = input(input_message)
+        
+        if (not user_input.isdigit()):
+            is_valid = True
+        
+        else:
+            print(error_message)
+    
+    return user_input
