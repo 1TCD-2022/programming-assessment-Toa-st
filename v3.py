@@ -304,6 +304,9 @@ class library_manager():
         print('These are the book(s) that are currently loaned:\n')
         
         view_books(self.loaned_books)
+    
+    def view_due(self):
+        book_times = list(self.loaned_books.col_values(4))
              
 
 def main():
@@ -318,7 +321,8 @@ def main():
                ['Loan Book', manager.loan_book], 
                ['Return Book', manager.return_book],
                ['View Available Books', manager.view_available],
-               ['View Loaned Books', manager.view_loaned]]
+               ['View Loaned Books', manager.view_loaned],
+               ['View Due Books', manager.view_due]]
     # exit number is used so the menu can be added to quickly
     exit_number = len(OPTIONS) + 1 
     user_choice = 0
@@ -346,5 +350,5 @@ def main():
 
     print('Thanks for using this program!')
 
-if (__name__ == '__main__'):    
+if (__name__ == '__main__'):
     main()  # runs the program
