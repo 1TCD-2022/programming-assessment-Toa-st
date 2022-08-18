@@ -95,30 +95,41 @@ def delete_gaps(worksheet):
     
     worksheet.update('A1', good_rows_content)
         
-def view_books(worksheet):
+def view_books(columns):
     """This function prints the books from a list"""
-    book_names = list(worksheet.col_values(1))
-    book_fiction = list(worksheet.col_values(2))
     
+    # the individual outputs will be printed from here
+    # gets the length of coloumn 0 as it is assumed that all nested list are the same in size
+    outputs = [''] * len(columns[0])
     
-    # checks if the worksheet is empty
-    if (book_names != []):
-        
-        # gets the highest length book name to print spacing evenly
-        longest_book = max(book_names, key=len)
+    try:
     
-        for index in range(len(book_names)):
+        for column in columns:
             
-            # finds correct spacing and gets that many spaces
-            space = ' '
-            # adds 1 for spacing
-            spaces = len(longest_book)  + 1 - len(book_names[index])
+            # finds the length of longest word and adds one for spacing
+            longest_word = len(max(column, key=len)) + 1
             
-            print('{}{}| {}'.format(book_names[index], space * spaces, book_fiction[index]))
+            for index in range(len(column)):
+                
+                item = column[index]
+                
+                # converts into spaces
+                spacing = (longest_word - len(item)) * ' '
+                
+                spacer = ''
+                
+                # last index
+                if (columns.index(column) != len(columns) - 1):
+                    spacer = '|'
+                
+                outputs[index] += '{}{} {} '.format(item, spacing, spacer)
     
-    else:
-        print('\nThere are no books here!')
+    except ValueError:
+        print('No books to print!')
     
+    for output in outputs:
+        print(output)
+            
     print('\n_______________________________________________\n')
 
 class library_manager():
@@ -167,7 +178,7 @@ class library_manager():
                 is_loaned = find_book(self.loaned_books, book_name, 1)
                 
                 # adds them together
-                # if they are both -1 (not found), -1 + -1 is 0
+                # if they are both -1 (not found)
                 if (is_available == -1 and is_loaned == -1):
                     # if it is not found, it adds the name
                     new_book[x].append(book_name)
@@ -189,8 +200,10 @@ class library_manager():
                     # if it is in the second half of the list is just appends it
                     new_book[x].append(is_fiction)
                 
-                # gets rid of empty spaces (book found in library)
+                print()
                 
+            # gets rid of empty spaces (book found in library)
+            if (new_book != []):
                 empty_books = []
                 
                 for book in range(len(new_book)):
@@ -237,7 +250,7 @@ class library_manager():
                     book_rows.append(book_row)
                     
                     # adds the students name and the time + 3 weeks in seconds
-                    three_weeks_seconds = 1814400
+                    three_weeks_seconds = 21 * 24 * 60 * 60
                     time_stamp = round(time.time(), 0) + three_weeks_seconds
                     
                     additional_info.append([student_name, time_stamp])
@@ -262,7 +275,7 @@ class library_manager():
         """This function allows users to reutrn books"""
         # this list is used for storing all the rows of te books that the user is returning
         book_rows = []
-        
+
         # name of book
         return_book = ''
         
@@ -298,44 +311,46 @@ class library_manager():
     def view_available(self):
         print('These are the book(s) that are available to loan:\n')
         
-        view_books(self.available_books)
+        book_names = list(self.available_books.col_values(1))
+        book_fiction = list(self.available_books.col_values(2))
+        
+        view_books([book_names, book_fiction])
     
     def view_loaned(self):
         print('These are the book(s) that are currently loaned:\n')
         
-        view_books(self.loaned_books)
+        book_names = list(self.loaned_books.col_values(1))
+        book_fiction = list(self.loaned_books.col_values(2))
+        
+        view_books([book_names, book_fiction])
     
     def view_due(self):
+        """"This function allows the user to view the books taht are due soon"""
+        due_books = []
+        book_names = []
+        book_owners = []
+        
+        # n number of days in seconds
+        threshold = 21 * 24 * 60 * 60
         
         # gets the time stamps
         book_times = list(self.loaned_books.col_values(4))
         
-        due_soon = []
-        
-        # 5 days in seconds
-        threshold = 21 * 24 * 60 * 60
-        
         for index in range(len(book_times)):
             
-            # checks if the due time is within 5 days
-            
-            time_till_due = int(book_times[index]) - time.time()
-            
-            if (time_till_due <= threshold):
-                # adds the row
-                # adds one as the rows start at one
-                due_soon.append(index + 1)
+            if (int(book_times[index]) <= threshold + time.time()):
+                # adds one as rows start at one instead of zero
+                due_books.append(index + 1)
         
-        # loops over all due soon book rows
-        for row in due_soon:
-            current_book = self.loaned_books.row_values(row)
-            
-            days = time_till_due / 60 / 60 / 24
-            
-            print('{} loaned by {} is due in {} day(s) and 0 hour(s).'.format(
-                current_book[0], current_book[2], days))
+        # puts the books name and owner into lists
+        for book_row in due_books:
+            current_book = list(self.loaned_books.row_values(book_row))
+
+            book_names.append(current_book[0])
+            book_owners.append(current_book[2])
+            # NEED TO ADD HOW LONG UNTIL DUE OR HOW OVER DUE!!!!!
         
-        print(self.spacer)
+        view_books([book_names, book_owners])
              
 
 def main():
