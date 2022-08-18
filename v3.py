@@ -306,7 +306,36 @@ class library_manager():
         view_books(self.loaned_books)
     
     def view_due(self):
+        
+        # gets the time stamps
         book_times = list(self.loaned_books.col_values(4))
+        
+        due_soon = []
+        
+        # 5 days in seconds
+        threshold = 21 * 24 * 60 * 60
+        
+        for index in range(len(book_times)):
+            
+            # checks if the due time is within 5 days
+            
+            time_till_due = int(book_times[index]) - time.time()
+            
+            if (time_till_due <= threshold):
+                # adds the row
+                # adds one as the rows start at one
+                due_soon.append(index + 1)
+        
+        # loops over all due soon book rows
+        for row in due_soon:
+            current_book = self.loaned_books.row_values(row)
+            
+            days = time_till_due / 60 / 60 / 24
+            
+            print('{} loaned by {} is due in {} day(s) and 0 hour(s).'.format(
+                current_book[0], current_book[2], days))
+        
+        print(self.spacer)
              
 
 def main():
