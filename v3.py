@@ -130,7 +130,7 @@ def view_books(columns):
     for output in outputs:
         print(output)
             
-    print('\n_______________________________________________\n')
+    print('_______________________________________________\n')
 
 class library_manager():
 
@@ -145,7 +145,7 @@ class library_manager():
         self.loaned_books = self.library_spreadsheet.worksheet('loaned')
         
         # to make the program look nice
-        self.spacer = '\n_______________________________________________\n'
+        self.spacer = '_______________________________________________\n'
 
     def add_book(self):
         """This function allows the user to add books to the database"""
@@ -385,7 +385,7 @@ def main():
         user_choice = int_valid_input("Pick an option ({} to exit): ".format(exit_number), 
                                     "Please enter a valid option!\n", 
                                     1, exit_number)
-        print('\n_______________________________________________\n')
+        print('_______________________________________________\n')
         if (user_choice != exit_number):
             OPTIONS[user_choice - 1][1]() # runs the specified function (index 1 of nested list)
             
