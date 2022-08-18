@@ -11,4 +11,4 @@ This prject uses to gspread API to connect with google sheets to use as a databa
 To start, just run `'pip install -r requirments.txt'` and run the python file.
 
 ###### Rubber duck 
-![rubber duck](./duck.png "A duck made out of rubber")
+![rubber duck](assets/duck.png "A duck made out of rubber")
