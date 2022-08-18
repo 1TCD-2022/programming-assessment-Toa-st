@@ -4,10 +4,15 @@ Author: Varun Goel
 Date: 10 / 08 / 22
 Description: This program will allow the user to:
     interact with a google spreadsheet and add books to a database
-    allow the user to loan books to students
-    allow users to return books
+    allow the user to:
+        loan books
+        return books
+        view books (available and loaned)
+        see books that are close to due date
     
 Version: 3.0
+
+Link: https://docs.google.com/spreadsheets/d/1cWH1xguStiyFoVgJWaLb2kMNlAGlbEnt4MFP20gnXm0/edit?usp=sharing
 
 IMPORTANT: you NEED to connected to the internet
            for the database to be connected
@@ -27,10 +32,10 @@ def next_available_row(worksheet):
     # gets the length of items in the coulumn and returns it
     return len(worksheet_coloumn) + 1
 
-def find_book(worksheet, book_name):
+def find_book(worksheet, book_name, col):
     """This function finds the line that a certain book is stored"""
     # gets the first coloumn of the worksheet
-    worksheet_items = list(worksheet.col_values(1))
+    worksheet_items = list(worksheet.col_values(col))
     
     if (book_name in worksheet_items):
         book_row = worksheet_items.index(book_name) + 1
@@ -40,7 +45,7 @@ def find_book(worksheet, book_name):
 
     return book_row
 
-def move_book(worksheet1, worksheet2, rows, range1='A', range2='Z'):
+def move_book(worksheet1, worksheet2, rows, range1='A', range2='Z', other_info=[]):
     """This function moves a book from one worksheet to another"""
     
     new_cells = []
@@ -61,10 +66,14 @@ def move_book(worksheet1, worksheet2, rows, range1='A', range2='Z'):
             new_cells[index].append(cell.value)
             cell.value = ''
         
+        if (other_info != []):
+            for info in other_info[index]:
+                new_cells[index].append(info)
+        
         
         # updates with old cells that have been cleared
         worksheet1.update_cells(cells)
-        
+
     # adds cells from other worksheet
     worksheet2.update('A{}'.format(next_available_row(worksheet2)), new_cells)
     
@@ -86,7 +95,31 @@ def delete_gaps(worksheet):
     
     worksheet.update('A1', good_rows_content)
         
+def view_books(worksheet):
+    """This function prints the books from a list"""
+    book_names = list(worksheet.col_values(1))
+    book_fiction = list(worksheet.col_values(2))
     
+    
+    # checks if the worksheet is empty
+    if (book_names != []):
+        
+        # gets the highest length book name to print spacing evenly
+        longest_book = max(book_names, key=len)
+    
+        for index in range(len(book_names)):
+            
+            # finds correct spacing and gets that many spaces
+            space = ' '
+            # adds 1 for spacing
+            spaces = len(longest_book)  + 1 - len(book_names[index])
+            
+            print('{}{}| {}'.format(book_names[index], space * spaces, book_fiction[index]))
+    
+    else:
+        print('\nThere are no books here!')
+    
+    print('\n_______________________________________________\n')
 
 class library_manager():
 
@@ -130,8 +163,13 @@ class library_manager():
                 book_name = input('What is the name of the book: ').lower()
                 
                 # checks if book is in library
-                if (find_book(self.available_books, book_name) == -1):
-                    # if it is not, it adds the name
+                is_available = find_book(self.available_books, book_name, 1)
+                is_loaned = find_book(self.loaned_books, book_name, 1)
+                
+                # adds them together
+                # if they are both -1 (not found), -1 + -1 is 0
+                if (is_available == -1 and is_loaned == -1):
+                    # if it is not found, it adds the name
                     new_book[x].append(book_name)
                 
                 else:
@@ -150,6 +188,17 @@ class library_manager():
                 else:
                     # if it is in the second half of the list is just appends it
                     new_book[x].append(is_fiction)
+                
+                # gets rid of empty spaces (book found in library)
+                
+                empty_books = []
+                
+                for book in range(len(new_book)):
+                    if (new_book[book] == []):
+                        empty_books.append(book)
+                
+                for empty_book in empty_books:
+                    new_book.pop(empty_book)
 
                 print(self.spacer)
             
@@ -166,28 +215,41 @@ class library_manager():
         # this list is used for storing all the rows of te books that the user is loaning
         book_rows = []
         
-        # name of book
+        # used to store the names of the students
+        additional_info = []
+        
+        # name of book and student
         loan_book = ''
         
         # repeats until user enters '#'
         while loan_book != '#':
             loan_book = input('Please enter the name of the book (# to exit): ').lower()
             
-            # finds the row of the said book name
-            book_row = find_book(self.available_books, loan_book)
-            
-            # if the function does not return -1 (not found) it adds the new row to a list
-            if (book_row != -1):
-                book_rows.append(book_row)
-                print('Found book!')
-            
-            # if the book row is not found and not '#' (exit char) it will tell the user
-            elif (book_row == -1 and loan_book != '#'):
-                print('Sorry, could not find your book.')
+            # makes sure it does not loop if it is not asked to
+            if (loan_book != '#'):
+                student_name = str_valid_input('Please enter the name of the student: ', 
+                                            'Please enter a valid name! (not digits)')
+                # finds the row of the said book name
+                book_row = find_book(self.available_books, loan_book, 1)
+                
+                # if the function does not return -1 (not found) it adds the new row to a list
+                if (book_row != -1):
+                    book_rows.append(book_row)
+                    
+                    # adds the students name and the time + 3 weeks in seconds
+                    three_weeks_seconds = 1814400
+                    time_stamp = round(time.time(), 0) + three_weeks_seconds
+                    
+                    additional_info.append([student_name, time_stamp])
+                    print('Found book!')
+                
+                # if the book row is not found and not '#' (exit char) it will tell the user
+                elif (book_row == -1):
+                    print('Sorry, could not find your book.')
         
         # moves the books if there are books to move
         if (book_rows != []):
-            move_book(self.available_books, self.loaned_books, book_rows, range2='B')
+            move_book(self.available_books, self.loaned_books, book_rows, range2='B', other_info=additional_info)
             print('Loaned out books.')
         
         
@@ -198,6 +260,7 @@ class library_manager():
     
     def return_book(self):
         """This function allows users to reutrn books"""
+        # this list is used for storing all the rows of te books that the user is returning
         book_rows = []
         
         # name of book
@@ -207,29 +270,72 @@ class library_manager():
         while return_book != '#':
             return_book = input('Please enter the name of the book (# to exit): ').lower()
             
-            # finds the row of the said book name
-            book_row = find_book(self.loaned_books, return_book)
+            if (return_book != '#'):
             
-            # if the function does not return -1 (not found) it adds the new row to a list
-            if (book_row != -1):
-                book_rows.append(book_row)
-                print('Found book!')
-            
-            # if the book row is not found and not '#' (exit char) it will tell the user
-            elif (book_row == -1 and return_book != '#'):
-                print('Sorry, could not find the book.')
+                # finds the row of the said book name
+                book_row = find_book(self.loaned_books, return_book, 1)
+                
+                # if the function does not return -1 (not found) it adds the new row to a list
+                if (book_row != -1):
+                    book_rows.append(book_row)
+                    print('Found book!')
+                
+                # if the book row is not found and not '#' (exit char) it will tell the user
+                elif (book_row == -1):
+                    print('Sorry, could not find the book.')
         
         # moves the books 
         
         if (book_rows != []):
-            move_book(self.loaned_books, self.available_books, book_rows, range2='D')
+            move_book(self.loaned_books, self.available_books, book_rows, range2='B')
             print('Returned books.')
         
         # gets rid of gaps
         delete_gaps(self.loaned_books)
         
         print(self.spacer)
+    
+    def view_available(self):
+        print('These are the book(s) that are available to loan:\n')
         
+        view_books(self.available_books)
+    
+    def view_loaned(self):
+        print('These are the book(s) that are currently loaned:\n')
+        
+        view_books(self.loaned_books)
+    
+    def view_due(self):
+        
+        # gets the time stamps
+        book_times = list(self.loaned_books.col_values(4))
+        
+        due_soon = []
+        
+        # 5 days in seconds
+        threshold = 21 * 24 * 60 * 60
+        
+        for index in range(len(book_times)):
+            
+            # checks if the due time is within 5 days
+            
+            time_till_due = int(book_times[index]) - time.time()
+            
+            if (time_till_due <= threshold):
+                # adds the row
+                # adds one as the rows start at one
+                due_soon.append(index + 1)
+        
+        # loops over all due soon book rows
+        for row in due_soon:
+            current_book = self.loaned_books.row_values(row)
+            
+            days = time_till_due / 60 / 60 / 24
+            
+            print('{} loaned by {} is due in {} day(s) and 0 hour(s).'.format(
+                current_book[0], current_book[2], days))
+        
+        print(self.spacer)
              
 
 def main():
@@ -242,7 +348,10 @@ def main():
     # to add more functions, add another nested list with the print statment and the function
     OPTIONS = [['Add Book', manager.add_book], 
                ['Loan Book', manager.loan_book], 
-               ['Return Book', manager.return_book]]
+               ['Return Book', manager.return_book],
+               ['View Available Books', manager.view_available],
+               ['View Loaned Books', manager.view_loaned],
+               ['View Due Books', manager.view_due]]
     # exit number is used so the menu can be added to quickly
     exit_number = len(OPTIONS) + 1 
     user_choice = 0
@@ -270,6 +379,5 @@ def main():
 
     print('Thanks for using this program!')
 
-if (__name__ == '__main__'):    
+if (__name__ == '__main__'):
     main()  # runs the program
-    
