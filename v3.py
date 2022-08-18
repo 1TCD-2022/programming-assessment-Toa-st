@@ -128,6 +128,7 @@ def view_books(columns):
         print('No books to print!')
     
     for output in outputs:
+        time.sleep(0.1)
         print(output)
             
     print('_______________________________________________\n')
@@ -328,10 +329,14 @@ class library_manager():
         """"This function allows the user to view the books taht are due soon"""
         due_books = []
         book_names = []
-        book_owners = []
+        book_owners = [] 
+        time_till_due = []   
         
         # n number of days in seconds
-        threshold = 21 * 24 * 60 * 60
+        #
+        #           n
+        #           ^
+        threshold = 7 * 24 * 60 * 60
         
         # gets the time stamps
         book_times = list(self.loaned_books.col_values(4))
@@ -343,14 +348,20 @@ class library_manager():
                 due_books.append(index + 1)
         
         # puts the books name and owner into lists
-        for book_row in due_books:
-            current_book = list(self.loaned_books.row_values(book_row))
+        for row in range(len(due_books)):
+            current_book = list(self.loaned_books.row_values(due_books[row]))
 
             book_names.append(current_book[0])
             book_owners.append(current_book[2])
-            # NEED TO ADD HOW LONG UNTIL DUE OR HOW OVER DUE!!!!!
-        
-        view_books([book_names, book_owners])
+            difference = round(int(current_book[3]) - int(time.time()), 0)
+            #                          (seconds to days)
+            days_difference = round(difference / 86400, 1)
+            
+            time_till_due.append('{} days left'.format(days_difference))
+
+            
+            
+        view_books([book_names, book_owners, time_till_due])
              
 
 def main():
