@@ -19,6 +19,7 @@ IMPORTANT: you NEED to connected to the internet
 """
 
 import gspread
+import sys
 import time
 # other file
 from valid_input import *
@@ -356,9 +357,18 @@ class library_manager():
 def main():
     """This is the main function for this program where everything is being run"""    
 
-    # make new object of 'library_manager' class
-    manager = library_manager()
+    print('This is a library manager!')
+    print('~Please ensure that you are connected to the internet!~\n')
 
+    # make new object of 'library_manager' class
+    try:
+        manager = library_manager()
+        
+    # could find a differnet way to catch the specific error
+    except:
+        time.sleep(2)
+        print('You are not connected!')
+        sys.exit()
     # this list contains all the functions to be referenced later
     # to add more functions, add another nested list with the print statment and the function
     OPTIONS = [['Add Book', manager.add_book], 
@@ -370,8 +380,6 @@ def main():
     # exit number is used so the menu can be added to quickly
     exit_number = len(OPTIONS) + 1 
     user_choice = 0
-
-    print('This is a library manager!\n')
 
     time.sleep(1)
 
