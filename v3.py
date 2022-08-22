@@ -173,7 +173,7 @@ class library_manager():
 
             for x in range(amount_of_books):
                 #populates list
-                book_name = input('What is the name of the book: ').lower().strip()
+                book_name = input('What is the name of book {}: '.format(x + 1)).lower().strip()
                 
                 # checks if book is in library
                 is_available = find_book(self.available_books, book_name, 1)
