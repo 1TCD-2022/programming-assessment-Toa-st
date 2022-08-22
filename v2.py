@@ -9,6 +9,10 @@ Version: 2.0
 
 IMPORTANT: you NEED to connected to the internet
            for the database to be connected
+
+PS: If you were to run this program and move a book to the loaned,
+    then try to run v3.py, the program will most likely crash as
+    it will be missing information about the book.
 """
 
 import gspread
@@ -125,7 +129,7 @@ class library_manager():
 
             for x in range(amount_of_books):
                 #populates list
-                book_name = input('What is the name of the book: ').lower()
+                book_name = input('What is the name of the book: ').lower().strip()
                 
                 # checks if book is in library
                 if (find_book(self.available_books, book_name) == -1):
@@ -169,7 +173,7 @@ class library_manager():
         
         # repeats until user enters '#'
         while loan_book != '#':
-            loan_book = input('Please enter the name of the book (# to exit): ').lower()
+            loan_book = input('Please enter the name of the book (# to exit): ').lower().strip()
             
             # finds the row of the said book name
             book_row = find_book(self.available_books, loan_book)
@@ -203,7 +207,7 @@ class library_manager():
         
         # repeats until user enters '#'
         while return_book != '#':
-            return_book = input('Please enter the name of the book (# to exit): ').lower()
+            return_book = input('Please enter the name of the book (# to exit): ').lower().strip()
             
             # finds the row of the said book name
             book_row = find_book(self.loaned_books, return_book)
