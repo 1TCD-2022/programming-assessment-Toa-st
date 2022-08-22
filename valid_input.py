@@ -3,7 +3,7 @@ def list_valid_input(input_message, error_message, valid_entries):
     user_input = ''
     
     while not user_input in valid_entries:
-        user_input = input(input_message).lower()
+        user_input = input(input_message).lower().strip()
         
         if not (user_input in valid_entries):
             print(error_message)
@@ -33,7 +33,7 @@ def str_valid_input(input_message, error_message):
     is_valid = False
     
     while not is_valid:
-        user_input = input(input_message).lower()
+        user_input = input(input_message).lower().strip()
         
         if (not user_input.isdigit()):
             is_valid = True

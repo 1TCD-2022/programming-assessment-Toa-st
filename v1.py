@@ -8,6 +8,10 @@ Version: 1.0
 
 IMPORTANT: you NEED to connected to the internet
            for the database to be connected
+           
+PS: If you were to run this program and move a book to the loaned,
+    then try to run v3.py, the program will most likely crash as
+    it will be missing information about the book.
 """
 
 import gspread
