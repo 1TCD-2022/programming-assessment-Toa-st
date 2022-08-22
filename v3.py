@@ -336,7 +336,7 @@ class library_manager():
         #
         #           n
         #           ^
-        threshold = 7 * 24 * 60 * 60
+        threshold = 20 * 24 * 60 * 60
         
         # gets the time stamps
         book_times = list(self.loaned_books.col_values(4))
