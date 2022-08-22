@@ -129,7 +129,7 @@ class library_manager():
 
             for x in range(amount_of_books):
                 #populates list
-                book_name = input('What is the name of the book: ').lower().strip()
+                book_name = input('What is the name of the book: ').lower()
                 
                 # checks if book is in library
                 if (find_book(self.available_books, book_name) == -1):
@@ -173,7 +173,7 @@ class library_manager():
         
         # repeats until user enters '#'
         while loan_book != '#':
-            loan_book = input('Please enter the name of the book (# to exit): ').lower().strip()
+            loan_book = input('Please enter the name of the book (# to exit): ').lower()
             
             # finds the row of the said book name
             book_row = find_book(self.available_books, loan_book)
@@ -207,7 +207,7 @@ class library_manager():
         
         # repeats until user enters '#'
         while return_book != '#':
-            return_book = input('Please enter the name of the book (# to exit): ').lower().strip()
+            return_book = input('Please enter the name of the book (# to exit): ').lower()
             
             # finds the row of the said book name
             book_row = find_book(self.loaned_books, return_book)
