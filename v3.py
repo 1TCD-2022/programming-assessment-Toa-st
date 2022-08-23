@@ -173,7 +173,9 @@ class library_manager():
 
             for x in range(amount_of_books):
                 #populates list
-                book_name = input('What is the name of book {}: '.format(x + 1)).lower().strip()
+                
+                book_name = str_valid_input('What is the name of book {}: '.format(x + 1),
+                                            'Please enter a valid name!')
                 
                 # checks if book is in library
                 is_available = find_book(self.available_books, book_name, 1)
@@ -238,12 +240,13 @@ class library_manager():
         
         # repeats until user enters '#'
         while loan_book != '#':
-            loan_book = input('Please enter the name of the book (# to exit): ').lower().strip()
+            loan_book = str_valid_input('Please enter the name of the book (# to exit)',
+                                            'Please enter a valid name!')
             
             # makes sure it does not loop if it is not asked to
             if (loan_book != '#'):
                 student_name = str_valid_input('Please enter the name of the student: ', 
-                                            'Please enter a valid name! (not digits)')
+                                            'Please enter a valid name! (not digits or just spaces)')
                 # finds the row of the said book name
                 book_row = find_book(self.available_books, loan_book, 1)
                 
@@ -283,7 +286,8 @@ class library_manager():
         
         # repeats until user enters '#'
         while return_book != '#':
-            return_book = input('Please enter the name of the book (# to exit): ').lower().strip()
+            return_book = str_valid_input('Please enter the name of the book (# to exit)',
+                                            'Please enter a valid name!')
             
             if (return_book != '#'):
             
