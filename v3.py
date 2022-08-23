@@ -360,7 +360,7 @@ class library_manager():
             book_owners.append(current_book[2])
             difference = round(int(current_book[3]) - int(time.time()), 0)
             #                          (seconds to days)
-            days_difference = round(difference / 86400, 1)
+            days_difference = round(difference / 86400, 2)
             
             time_till_due.append('{} days left'.format(days_difference))
 
