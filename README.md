@@ -10,5 +10,6 @@ This prject uses to gspread API to connect with google sheets to use as a databa
 
 To start, just run `'pip install -r requirements.txt'` and run the python file.
 
-###### Rubber duck 
+#
+ 
 ![rubber duck](assets/duck.png "A duck made out of rubber")
