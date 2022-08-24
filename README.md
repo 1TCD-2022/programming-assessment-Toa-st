@@ -12,4 +12,4 @@ To start, just run `'pip install -r requirements.txt'` and run the python file.
 
 #
  
-![rubber duck](assets/duck.png "A duck made out of rubber")
+![rubber duck](duck.png "A duck made out of rubber")
