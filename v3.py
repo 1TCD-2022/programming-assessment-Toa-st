@@ -256,7 +256,7 @@ class library_manager():
         # repeats until user enters '#'
         while loan_book != '#':
             loan_book = str_valid_input(
-                'Please enter the name of the book (# to exit)',
+                'Please enter the name of the book (# to exit): ',
                 'Please enter a valid name!')
 
             # makes sure it does not loop if it is not asked to
@@ -308,7 +308,7 @@ class library_manager():
         # repeats until user enters '#'
         while return_book != '#':
             return_book = str_valid_input(
-                'Please enter the name of the book (# to exit)',
+                'Please enter the name of the book (# to exit): ',
                 'Please enter a valid name!')
 
             if (return_book != '#'):
